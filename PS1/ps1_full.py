@@ -47,22 +47,22 @@ class SavingsPlan:
         
     
     def test_time():
-        case1_pars = [0.25, 0.04, 500000, 0.03, 120000, 0.05]
-        case2_pars = [0.25, 0.04, 800000, 0.03, 80000, 0.10]
-        case3_pars = [0.25, 0.04, 1500000, 0.05, 75000, 0.05]
+        case1b_pars = [0.25, 0.04, 500000, 0.03, 120000, 0.05]
+        case2b_pars = [0.25, 0.04, 800000, 0.03, 80000, 0.10]
+        case3b_pars = [0.25, 0.04, 1500000, 0.05, 75000, 0.05]
         
-        if SavingsPlan(*case1_pars).time_to_save() == 142:
-            print("Test Case 1 passed")
-        elif SavingsPlan(*case1_pars).time_to_save() != 142:
-            print("Test Case 1 failed")
-        if SavingsPlan(*case2_pars).time_to_save() == 159:
-            print("Test Case 2 passed")
-        elif SavingsPlan(*case2_pars).time_to_save() != 159:
-            print("Test Case 2 failed")
-        if SavingsPlan(*case3_pars).time_to_save() == 261:
-            print("Test Case 3 passed")
-        elif SavingsPlan(*case3_pars).time_to_save() != 261:
-            print("Test Case 3 failed")
+        if SavingsPlan(*case1b_pars).time_to_save() == 142:
+            print("Test Case 1B passed")
+        elif SavingsPlan(*case1b_pars).time_to_save() != 142:
+            print("Test Case 1B failed")
+        if SavingsPlan(*case2b_pars).time_to_save() == 159:
+            print("Test Case 2B passed")
+        elif SavingsPlan(*case2b_pars).time_to_save() != 159:
+            print("Test Case 2B failed")
+        if SavingsPlan(*case3b_pars).time_to_save() == 261:
+            print("Test Case 3B passed")
+        elif SavingsPlan(*case3b_pars).time_to_save() != 261:
+            print("Test Case 3B failed")
 
 PlanB = SavingsPlan
 PlanB.test_time()     
