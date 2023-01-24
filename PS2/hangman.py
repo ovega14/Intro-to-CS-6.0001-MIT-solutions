@@ -123,42 +123,84 @@ def hangman(secret_word):
     
     Follows the other limitations detailed in the problem write-up.
     '''
-    guesses_left = 6
-    letters_guessed = []
-    warnings = 3
-    score = 0
-    print("Welcome to the game Hangman!")
-    print(f"I am thinking of a word that is {len(secret_word)} letters long.")
-    print("-------------")
-    
-    while guesses_left > 0:
-        print(f"You have {guesses_left} guesses left.")
-        print("Available letters:", get_available_letters(letters_guessed))
-        guess = input("Please guess a letter: ").lower()
-        while guess in letters_guessed:
-            warnings -= 1
-            print(f"Oops! You've already guessed that letter. You have {warnings} warnings left: ")
-            break
-        if guess not in string.ascii_lowercase:
-            warnings -= 1
-            print(f"Oops! That is not a valid letter. You have {warnings} warnings left: ")
-        elif guess in secret_word:
-            letters_guessed.append(guess)
-            guesses_left -= 1
-            print('Good guess:', get_guessed_word(secret_word, letters_guessed))
+
+    play = True
+    while play:
+        guesses_left = 6
+        letters_guessed = []
+        warnings = 3
+        score = 0
+        victory = False
+        print("Welcome to the game Hangman!")
+        print(f"I am thinking of a word that is {len(secret_word)} letters long.")
+        print("-------------")
+        
+        # allow player to keep guessing until they run out of guesses
+        while guesses_left > 0 and not victory:
+            print(f"You have {guesses_left} guesses left.")
+            print("Available letters:", get_available_letters(letters_guessed))
+            guess = input("Please guess a letter: ").lower()
+            while guess in letters_guessed:
+                # penalize player for guessing same character more than once
+                warnings -= 1
+                if warnings < 0:
+                    guesses_left -= 1
+                    print(f"Oops! You've already guessed that letter. You have no warnings left.")
+                    print('so you lose one guess:', get_guessed_word(secret_word, letters_guessed))
+                else:
+                     print(f"Oops! You've already guessed that letter. You have {warnings} warnings left: ")
+                     print(get_guessed_word(secret_word, letters_guessed))
+                break
+            if guess not in string.ascii_lowercase:
+                # penalize player for guessing invalid character
+                warnings -= 1
+                if warnings < 0:
+                    guesses_left -= 1
+                    print(f"Oops! That is not a valid letter. You have no warnings left.")
+                    print('so you lose one guess:', get_guessed_word(secret_word, letters_guessed))
+                else:
+                    print(f"Oops! That is not a valid letter. You have {warnings} warnings left: ")
+                    print(get_guessed_word(secret_word, letters_guessed))
+            elif guess in secret_word:
+                letters_guessed.append(guess)
+                print('Good guess:', get_guessed_word(secret_word, letters_guessed))
+                # check for victory
+                if is_word_guessed(secret_word, letters_guessed):
+                    secret_letters = set([char for char in secret_word])
+                    score += guesses_left*len(secret_letters)
+                    print(f"Congratulations, you won!\nYour total score for this game is: {score}")
+                    victory = True
+                    break
+            else:
+                letters_guessed.append(guess)
+                print("Oops! That letter is not in my word:", get_guessed_word(secret_word, letters_guessed))
+                if guess in ['a', 'e', 'i', 'o', 'u']:
+                    # lose 2 guesses for incorrect vowels
+                    guesses_left -= 2
+                else:
+                    # lose 1 guess for incorrect consonant
+                    guesses_left -= 1
+        print("------------")
+        
+        # loss when all guesses depleted
+        if victory:
+            pass
         else:
-            letters_guessed.append(guess)
-            guesses_left -= 1
-            print("Oops! That letter is not in my word:", get_guessed_word(secret_word, letters_guessed))
-    print("------------")
-    if is_word_guessed(secret_word, letters_guessed):
-        secret_letters = set([char for char in secret_word])
-        score += guesses_left*len(secret_letters)
-        print(f"Congratulations, you won!\nYour total score for this game is: {score}")
-    else:
-        print("Sorry, you lose! You're out of guesses.")
+            print("Sorry, you lose! You're out of guesses.")
+        
+        # prompt player to play again
+        play_again = 0
+        while play_again not in ['Y', 'N', 'y', 'n']:
+            print("Please type either Y or N")
+            play_again = input("Play again? [Y/N] ")
+        if play_again.upper() == 'Y':
+            play = True
+        elif play_again.upper() == 'N':
+            play = False
+        print("------------")
+
     
-hangman('apple')
+#hangman('apple')
 
 # When you've completed your hangman function, scroll down to the bottom
 # of the file and uncomment the first two lines to test
