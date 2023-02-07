@@ -310,7 +310,7 @@ def play_hand(hand, word_list):
         display_hand(hand)
         
         # Ask user for input
-        word = input('Enter a word: ')
+        word = input('Enter word, or "!!" to indicate that you are finished: ')
         
         # If the input is two exclamation points:
         if word == '!!':
@@ -327,7 +327,7 @@ def play_hand(hand, word_list):
 
                 # Tell the user how many points the word earned,
                 word_score = get_word_score(word, calculate_handlen(hand))
-                print(f'Your word {word} is worth {word_score} points!')
+                print(f'{word} earned {word_score} points. Total:', score + word_score)
                 
                 # and the updated total score
                 score += word_score
@@ -335,7 +335,7 @@ def play_hand(hand, word_list):
             # Otherwise (the word is not valid):
             else:
                 # Reject invalid word (print a message)
-                print(f'Your word {word} is not vaid.')
+                print('That is not a valid word. Please choose another word.')
                 
             # update the user's hand by removing the letters of their inputted word
             hand = update_hand(hand, word)
@@ -343,7 +343,10 @@ def play_hand(hand, word_list):
 
     # Game is over (user entered '!!' or ran out of letters),
     # so tell user the total score
-    print(f'Your total score for this game is {score}!')
+    if calculate_handlen(hand) == 0:
+        print(f'Ran out of letters. Total score: {score} points')
+    else:
+        print(f'Total score: {score} points')
 
     # Return the total score as result of function
     return score
