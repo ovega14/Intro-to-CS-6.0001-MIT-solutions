@@ -307,10 +307,11 @@ def play_hand(hand, word_list):
     while calculate_handlen(hand) > 0:
     
         # Display the hand
+        print("Current hand: ", end=" ")
         display_hand(hand)
         
         # Ask user for input
-        word = input('Enter word, or "!!" to indicate that you are finished: ')
+        word = input('Please enter a word or "!!" to indicate that you are done: ')
         
         # If the input is two exclamation points:
         if word == '!!':
@@ -344,10 +345,11 @@ def play_hand(hand, word_list):
     # Game is over (user entered '!!' or ran out of letters),
     # so tell user the total score
     if calculate_handlen(hand) == 0:
-        print(f'Ran out of letters. Total score: {score} points')
+        print(f'Ran out of letters. Total score for this hand: {score} points')
     else:
-        print(f'Total score: {score} points')
+        print(f'Total score for this hand: {score} points')
 
+    print('----------')
     # Return the total score as result of function
     return score
 
@@ -384,7 +386,32 @@ def substitute_hand(hand, letter):
     returns: dictionary (string -> int)
     """
     
-    pass  # TO DO... Remove this line when you implement this function
+    # save counts and delete that letter from their hand
+    counts = hand[letter]
+    del(hand[letter])
+    
+    # get new set of possible vowels and consonants
+    vowels = VOWELS
+    for vowel in hand.keys():
+        if vowel in VOWELS:
+            vowels = vowels.replace(vowel, '')
+    
+    consonants= CONSONANTS
+    for consonant in hand.keys():
+        if consonant in CONSONANTS:
+            consonants = consonants.replace(consonant, '')              
+    
+    # choose a new letter at random
+    if letter in VOWELS:
+        x = random.choice(vowels)
+        hand[x] = counts
+        
+    elif letter in CONSONANTS:
+        x = random.choice(consonants)
+        hand[x] = counts
+    
+    return hand
+    
        
     
 def play_game(word_list):
@@ -418,9 +445,60 @@ def play_game(word_list):
     word_list: list of lowercase strings
     """
     
-    print("play_game not implemented.") # TO DO... Remove this line when you implement this function
+    # keep track of overall game score
+    total_score = 0
     
-
+    # ask the user for number of hands
+    num_hands = int(input("Enter total number of hands: "))
+    
+    # keep track of number of substitutes and replays to only allow each once
+    num_subs = 1
+    num_replays = 1
+    
+    while num_hands > 0:
+        # deal a hand and display it to player
+        hand = deal_hand(n=7)
+        print("Current hand: ", end=" ")
+        display_hand(hand)
+        
+        # ask player if they want to substitute a letter
+        sub = None
+        while sub not in ['yes', 'no'] and num_subs > 0:
+            sub = input("Would you like to substitute a letter? ").lower()
+            if sub == 'yes':
+                # ask user which letter they want to replace
+                letter = input("Which letter would you like to replace? ")
+                sub_hand = substitute_hand(hand, letter)
+                num_subs -= 1
+            elif sub == 'no':
+                print()
+            else:
+                print("Please enter either YES or NO")
+        
+        # play a hand
+        if sub == 'yes':
+            score = play_hand(sub_hand, word_list)
+        else:
+            score = play_hand(hand, word_list)
+        num_hands -= 1
+        
+        # ask player if they want to replay the hand
+        replay = None
+        while replay not in ['yes', 'no'] and num_replays > 0:
+            replay = input("Would you like to replay the hand? ")
+            if replay == 'yes':
+                # replay the same hand and keep better of two scores
+                new_score = play_hand(hand, word_list)
+                score = max(score, new_score)
+                num_replays -= 1
+            elif replay == 'no':
+                pass
+            else:
+                print("Please enter either YES or NO")
+        total_score += score
+    
+    print("Total score over all hands:", total_score)
+    return total_score
 
 #
 # Build data structures used for entire session and play game
