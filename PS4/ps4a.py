@@ -1,5 +1,5 @@
 # Problem Set 4A
-# Name: <your name here>
+# Name: Octavio Vega
 # Collaborators:
 # Time Spent: x:xx
 
@@ -23,8 +23,15 @@ def get_permutations(sequence):
     a different order than what is listed here.
     '''
 
-    pass #delete this line and replace with your code here
-
+    n = len(sequence)
+    # base case: unit length sequences have only one permutation
+    if n == 1:
+        return [sequence]
+    
+    # recursive step: get all permutations of length n-1 sequence and shift first character around
+    else:
+        return [s[:i] + sequence[0] + s[i:] for i in range(n) for s in get_permutations(sequence[1:])]
+        
 if __name__ == '__main__':
 #    #EXAMPLE
 #    example_input = 'abc'
@@ -37,4 +44,6 @@ if __name__ == '__main__':
 #    sequence of length n)
 
     pass #delete this line and replace with your code here
+    
+    
 
