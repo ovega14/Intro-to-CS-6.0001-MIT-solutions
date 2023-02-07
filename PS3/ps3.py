@@ -16,7 +16,7 @@ CONSONANTS = 'bcdfghjklmnpqrstvwxyz'
 HAND_SIZE = 7
 
 SCRABBLE_LETTER_VALUES = {
-    'a': 1, 'b': 3, 'c': 3, 'd': 2, 'e': 1, 'f': 4, 'g': 2, 'h': 4, 'i': 1, 'j': 8, 'k': 5, 'l': 1, 'm': 3, 'n': 1, 'o': 1, 'p': 3, 'q': 10, 'r': 1, 's': 1, 't': 1, 'u': 1, 'v': 4, 'w': 4, 'x': 8, 'y': 4, 'z': 10
+    'a': 1, 'b': 3, 'c': 3, 'd': 2, 'e': 1, 'f': 4, 'g': 2, 'h': 4, 'i': 1, 'j': 8, 'k': 5, 'l': 1, 'm': 3, 'n': 1, 'o': 1, 'p': 3, 'q': 10, 'r': 1, 's': 1, 't': 1, 'u': 1, 'v': 4, 'w': 4, 'x': 8, 'y': 4, 'z': 10, '*': 0
 }
 
 # -----------------------------------
@@ -145,13 +145,17 @@ def deal_hand(n):
     hand={}
     num_vowels = int(math.ceil(n / 3))
 
-    for i in range(num_vowels):
+    # one fewer vowel to account for wildcard
+    for i in range(num_vowels - 1):
         x = random.choice(VOWELS)
         hand[x] = hand.get(x, 0) + 1
     
     for i in range(num_vowels, n):    
         x = random.choice(CONSONANTS)
         hand[x] = hand.get(x, 0) + 1
+    
+    # guaranteed wildcard in each round
+    hand['*'] = 1
     
     return hand
 
@@ -209,23 +213,49 @@ def is_valid_word(word, hand, word_list):
     word_list: list of lowercase strings
     returns: boolean
     """
-
-    # list the characters in the lowercase word
-    word_letters = list(word.lower())
-
-    # check that the word is in the wordlist
-    if word.lower() in word_list:
-        for letter in word_letters:
-            # cannot use letters not in the hand
-            if letter not in list(hand.keys()):
-                return False
-            # can only use letter as many times as it occurs in hand
-            elif word_letters.count(letter) > hand[letter]:
-                return False
-        else:
-            return True
+    # IF wildcard used
+    if '*' in word:
+        # list possible words that could be created by replacing wildcard
+        possible_words = [word.replace("*", vowel) for vowel in VOWELS]
+        check = 0
+        for pos_word in possible_words:
+            # list the characters in the lowercase word
+            pos_word_letters = list(pos_word.lower())
+        
+            # check that the word is in the wordlist
+            if pos_word.lower() in word_list:
+                for letter in pos_word_letters:
+                    # cannot use letters not in the hand
+                    if letter not in list(hand.keys()):
+                        pass
+                    # can only use letter as many times as it occurs in hand
+                    elif pos_word_letters.count(letter) > hand[letter]:
+                        pass
+                else:
+                    check += 1
+            else:
+                pass
+        return check > 0
+    
+    # IF NO wildcard used
     else:
-        return False
+        # list the characters in the lowercase word
+        word_letters = list(word.lower())
+    
+        # check that the word is in the wordlist
+        if word.lower() in word_list:
+            for letter in word_letters:
+                # cannot use letters not in the hand
+                if letter not in list(hand.keys()):
+                    return False
+                # can only use letter as many times as it occurs in hand
+                elif word_letters.count(letter) > hand[letter]:
+                    return False
+            else:
+                return True
+        else:
+            return False
+        
 
 #
 # Problem #5: Playing a hand
