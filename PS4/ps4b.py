@@ -1,5 +1,5 @@
 # Problem Set 4B
-# Name: <your name here>
+# Name: Octavio Vega
 # Collaborators:
 # Time Spent: x:xx
 
@@ -70,7 +70,8 @@ class Message(object):
             self.message_text (string, determined by input text)
             self.valid_words (list, determined using helper function load_words)
         '''
-        pass #delete this line and replace with your code here
+        self.message_text = text
+        self.valid_words = load_words('words.txt')
 
     def get_message_text(self):
         '''
@@ -78,7 +79,7 @@ class Message(object):
         
         Returns: self.message_text
         '''
-        pass #delete this line and replace with your code here
+        return self.message_text
 
     def get_valid_words(self):
         '''
@@ -87,7 +88,7 @@ class Message(object):
         
         Returns: a COPY of self.valid_words
         '''
-        pass #delete this line and replace with your code here
+        return self.valid_words.copy()
 
     def build_shift_dict(self, shift):
         '''
@@ -103,7 +104,24 @@ class Message(object):
         Returns: a dictionary mapping a letter (string) to 
                  another letter (string). 
         '''
-        pass #delete this line and replace with your code here
+        # strings of upper and lowercase letters
+        upper = string.ascii_uppercase
+        lower = string.ascii_lowercase
+        
+        # initialize dictionary to store map
+        shift_dict = {}
+        
+        # shift the full strings
+        upper_shift = upper[shift:] + upper[:shift-1]
+        lower_shift = lower[shift:] + lower[:shift-1]
+        
+        # iterate over corresponding letters to fill the dictionary
+        for i in range(26):
+            shift_dict[upper[i]] = upper_shift[i]
+        for i in range(26):
+            shift_dict[lower[i]] = lower_shift[i]
+        
+        return shift_dict
 
     def apply_shift(self, shift):
         '''
@@ -117,7 +135,12 @@ class Message(object):
         Returns: the message text (string) in which every character is shifted
              down the alphabet by the input shift
         '''
-        pass #delete this line and replace with your code here
+        message = ''
+        # iterate over characters in message text to translate them
+        for char in self.message_text:
+            message += self.get_shift_dict(shift).get(char, char)
+        
+        return message
 
 class PlaintextMessage(Message):
     def __init__(self, text, shift):
@@ -135,7 +158,11 @@ class PlaintextMessage(Message):
             self.message_text_encrypted (string, created using shift)
 
         '''
-        pass #delete this line and replace with your code here
+        self.message_text = text
+        self.valid_words = load_words('words.txt')
+        self.shift = shift
+        self.encryption_dict = Message.build_shift_dict(self.shift)
+        self.message_text_encrypted = Message.apply_shift(self.shift)
 
     def get_shift(self):
         '''
@@ -143,7 +170,7 @@ class PlaintextMessage(Message):
         
         Returns: self.shift
         '''
-        pass #delete this line and replace with your code here
+        return self.shift
 
     def get_encryption_dict(self):
         '''
@@ -151,7 +178,7 @@ class PlaintextMessage(Message):
         
         Returns: a COPY of self.encryption_dict
         '''
-        pass #delete this line and replace with your code here
+        return self.encryption_dict.copy()
 
     def get_message_text_encrypted(self):
         '''
@@ -159,7 +186,7 @@ class PlaintextMessage(Message):
         
         Returns: self.message_text_encrypted
         '''
-        pass #delete this line and replace with your code here
+        return self.message_text_encrypted
 
     def change_shift(self, shift):
         '''
@@ -171,7 +198,7 @@ class PlaintextMessage(Message):
 
         Returns: nothing
         '''
-        pass #delete this line and replace with your code here
+        self.shift = shift
 
 
 class CiphertextMessage(Message):
