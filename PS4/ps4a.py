@@ -24,12 +24,14 @@ def get_permutations(sequence):
     '''
 
     n = len(sequence)
+    
     # base case: unit length sequences have only one permutation
     if n == 1:
-        return [sequence]
+        return [sequence] # only one possible permutation of a single element
     
     # recursive step: get all unique permutations of length n-1 sequence and shift first character around
     else:
+        # create a list from the set so as to avoid storing duplicate permutations
         return [*set([s[:i] + sequence[0] + s[i:] for i in range(n) for s in get_permutations(sequence[1:])])]
         
 if __name__ == '__main__':
@@ -47,7 +49,7 @@ if __name__ == '__main__':
     example_input_1 = 'abc'
     expected_output_1 = ['abc', 'acb', 'bac', 'bca', 'cab', 'cba']
     actual_output_1 = get_permutations(example_input_1)
-    if sorted(expected_output_1) == sorted(actual_output_1):
+    if sorted(expected_output_1) == sorted(actual_output_1): # use sorted() since order is arbitrary
         print("Test case 1 PASSED")
     else:
         print(f"Test case 1 FAILED: expected {expected_output_1} but received {actual_output_1}")
