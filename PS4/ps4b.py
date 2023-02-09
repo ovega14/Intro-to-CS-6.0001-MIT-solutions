@@ -220,7 +220,7 @@ class CiphertextMessage(Message):
             self.message_text (string, determined by input text)
             self.valid_words (list, determined using helper function load_words)
         '''
-        pass #delete this line and replace with your code here
+        Message.__init__(self, text)
 
     def decrypt_message(self):
         '''
@@ -238,8 +238,38 @@ class CiphertextMessage(Message):
         Returns: a tuple of the best shift value used to decrypt the message
         and the decrypted message text using that shift value
         '''
-        pass #delete this line and replace with your code here
-
+        # create instance of message with input text
+        message = Message(self.get_message_text())
+        
+        # initialize dict to count valid words per shift
+        valid_word_counts = {}
+        
+        # iterate over possible shifts
+        for k in range(26):
+            valid_word_counts[k] = 0
+            
+            # apply the inverse shift
+            shifted_message = message.apply_shift(26-k)
+            
+            # get words from the text, ignoring punctuation
+            words = shifted_message.split()
+            
+            # check each word for validity and count the valid ones
+            for word in words:
+                if is_word(self.valid_words, word):
+                    valid_word_counts[k] += 1
+            
+        # find the shift with highest number of valid words
+        counts = list(valid_word_counts.values())
+        shifts = list(valid_word_counts.keys())
+        
+        best_shift = shifts[counts.index(max(counts))]
+        
+        # corresponding decrypted message with highest valid word count
+        best_message = message.apply_shift(26-best_shift)
+        
+        return (best_shift, best_message)
+            
 if __name__ == '__main__':
 
 #    #Example test case (PlaintextMessage)
@@ -257,3 +287,15 @@ if __name__ == '__main__':
     #TODO: best shift value and unencrypted story 
     
     pass #delete this line and replace with your code here
+
+
+
+# my own tests that work
+story_string = get_story_string()
+story = Message(story_string)
+
+#print(story.apply_shift(12)) # 12 works
+
+cipher_story = CiphertextMessage(story_string)
+print(cipher_story.decrypt_message())
+
