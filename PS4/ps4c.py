@@ -156,7 +156,7 @@ class EncryptedSubMessage(SubMessage):
             self.message_text (string, determined by input text)
             self.valid_words (list, determined using helper function load_words)
         '''
-        pass #delete this line and replace with your code here
+        SubMessage.__init__(self, text)
 
     def decrypt_message(self):
         '''
@@ -176,7 +176,37 @@ class EncryptedSubMessage(SubMessage):
         
         Hint: use your function from Part 4A
         '''
-        pass #delete this line and replace with your code here
+        # get the list of possible permutations of vowels
+        vowel_permutations = get_permutations(VOWELS_LOWER) #5! = 120 options
+        
+        # initialize a dict to store the number of valid words per permutation
+        valid_word_counts = {}
+    
+        # iterate over possible permutations and count valid words in translated message
+        for perm in vowel_permutations:
+            valid_word_counts[perm] = 0 
+            
+            # build a transpose dictionary for the perm and translate
+            transpose_dict = self.build_transpose_dict(perm)
+            new_message = self.apply_transpose(transpose_dict)
+            
+            # split into words and count
+            new_words = new_message.split()
+            for word in new_words:
+                if is_word(self.get_valid_words(), word):
+                    valid_word_counts[perm] += 1
+            
+        # find the permutation that results in the most English words
+        counts = list(valid_word_counts.values())
+        
+        # if no good permutations, return original message
+        if max(counts) == 0:
+            best_message = self.get_message_text()
+        else:
+            best_perm = vowel_permutations[counts.index(max(counts))]
+            best_message = self.apply_transpose(self.build_transpose_dict(best_perm))
+        
+        return best_message
     
 
 if __name__ == '__main__':
