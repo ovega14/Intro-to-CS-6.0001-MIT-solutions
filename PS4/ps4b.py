@@ -164,8 +164,8 @@ class PlaintextMessage(Message):
         '''
         Message.__init__(self, text)
         self.shift = shift
-        self.encryption_dict = Message.build_shift_dict(self.shift)
-        self.message_text_encrypted = Message.apply_shift(self.shift)
+        self.encryption_dict = self.build_shift_dict(self.shift)
+        self.message_text_encrypted = self.apply_shift(self.shift)
 
     def get_shift(self):
         '''
@@ -263,39 +263,57 @@ class CiphertextMessage(Message):
         counts = list(valid_word_counts.values())
         shifts = list(valid_word_counts.keys())
         
-        best_shift = shifts[counts.index(max(counts))]
+        best_shift = 26 - shifts[counts.index(max(counts))]
         
         # corresponding decrypted message with highest valid word count
-        best_message = message.apply_shift(26-best_shift)
+        best_message = message.apply_shift(best_shift)
         
         return (best_shift, best_message)
             
 if __name__ == '__main__':
 
-#    #Example test case (PlaintextMessage)
-#    plaintext = PlaintextMessage('hello', 2)
-#    print('Expected Output: jgnnq')
-#    print('Actual Output:', plaintext.get_message_text_encrypted())
-#
-#    #Example test case (CiphertextMessage)
-#    ciphertext = CiphertextMessage('jgnnq')
-#    print('Expected Output:', (24, 'hello'))
-#    print('Actual Output:', ciphertext.decrypt_message())
-
-    #TODO: WRITE YOUR TEST CASES HERE
-
-    #TODO: best shift value and unencrypted story 
+    #Test Case 1 (PlaintextMessage)
+    plaintext = PlaintextMessage('hello', 2)
+    expected_output = 'jgnnq'
+    actual_output = plaintext.get_message_text_encrypted()
+    if expected_output == actual_output:
+        print("PlaintextMessage Test Case 1 PASSED")
+    else:
+        print("PlaintextMessage Test Case 1 FAILED")
+        print(f"Expected {expected_output} but got {actual_output}")
     
-    pass #delete this line and replace with your code here
+    #Test Case 2 (PlaintextMessage)
+    plaintext = PlaintextMessage('this is 6.0001', 25)
+    expected_output = 'sghr hr 6.0001'
+    actual_output = plaintext.get_message_text_encrypted()
+    if expected_output == actual_output:
+        print("PlaintextMessage Test Case 2 PASSED")
+    else:
+        print("PlaintextMessage Test Case 2 FAILED")
+        print(f"Expected {expected_output} but got {actual_output}")
 
-
-
-# my own tests that work
-story_string = get_story_string()
-story = Message(story_string)
-
-#print(story.apply_shift(12)) # 12 works
-
-cipher_story = CiphertextMessage(story_string)
-print(cipher_story.decrypt_message())
+    #Test Case 1 (CiphertextMessage)
+    ciphertext = CiphertextMessage('jgnnq')
+    expected_output = (24, 'hello')
+    actual_output = ciphertext.decrypt_message()
+    if expected_output == actual_output:
+        print("CiphertextMessage Test Case 1 PASSED")
+    else:
+        print("CiphertextMessage Test Case 1 FAILED")
+        print(f"Expected {expected_output} but got {actual_output}")
+        
+    #Test Case 2 (CiphertextMessage)
+    ciphertext = CiphertextMessage('sghr hr 6.0001')
+    expected_output = (1, 'this is 6.0001')
+    actual_output = ciphertext.decrypt_message()
+    if expected_output == actual_output:
+        print("CiphertextMessage Test Case 2 PASSED")
+    else:
+        print("CiphertextMessage Test Case 2 FAILED")
+        print(f"Expected {expected_output} but got {actual_output}")
+        
+    # best shift value and unencrypted story 
+    story_string = get_story_string()
+    cipher_story = CiphertextMessage(story_string)
+    print(cipher_story.decrypt_message())
 
