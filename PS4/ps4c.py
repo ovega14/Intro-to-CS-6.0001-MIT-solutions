@@ -1,5 +1,5 @@
 # Problem Set 4C
-# Name: <your name here>
+# Name: Octavio Vega
 # Collaborators:
 # Time Spent: x:xx
 
@@ -70,7 +70,8 @@ class SubMessage(object):
             self.message_text (string, determined by input text)
             self.valid_words (list, determined using helper function load_words)
         '''
-        pass #delete this line and replace with your code here
+        self.message_text = text
+        self.valid_words = load_words('words.txt')
     
     def get_message_text(self):
         '''
@@ -78,7 +79,7 @@ class SubMessage(object):
         
         Returns: self.message_text
         '''
-        pass #delete this line and replace with your code here
+        return self.message_text
 
     def get_valid_words(self):
         '''
@@ -87,7 +88,7 @@ class SubMessage(object):
         
         Returns: a COPY of self.valid_words
         '''
-        pass #delete this line and replace with your code here
+        return self.valid_words.copy()
                 
     def build_transpose_dict(self, vowels_permutation):
         '''
@@ -109,7 +110,20 @@ class SubMessage(object):
                  another letter (string). 
         '''
         
-        pass #delete this line and replace with your code here
+        # initialize a dict to store the map
+        map_dict = {}
+        
+        # consonants stay the same
+        for i in range(21):
+            map_dict[CONSONANTS_LOWER[i]] = CONSONANTS_LOWER[i]
+            map_dict[CONSONANTS_UPPER[i]] = CONSONANTS_UPPER[i]
+            
+        # record the mapping for vowels
+        for i in range(5):
+            map_dict[VOWELS_LOWER[i]] = vowels_permutation[i]
+            map_dict[VOWELS_UPPER[i]] = vowels_permutation[i].upper()
+        
+        return map_dict
     
     def apply_transpose(self, transpose_dict):
         '''
@@ -119,7 +133,17 @@ class SubMessage(object):
         on the dictionary
         '''
         
-        pass #delete this line and replace with your code here
+        # get the input message
+        input_message = self.get_message_text()
+        
+        # initialize empty message to write new message
+        new_message = ''
+        
+        # iterate over input message and translate
+        for char in input_message:
+            new_message += transpose_dict.get(char, char)
+        
+        return new_message
         
 class EncryptedSubMessage(SubMessage):
     def __init__(self, text):
