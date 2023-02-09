@@ -210,15 +210,53 @@ class EncryptedSubMessage(SubMessage):
     
 
 if __name__ == '__main__':
-
-    # Example test case
+     
+    #Test Case 1 (SubMessage)
     message = SubMessage("Hello World!")
     permutation = "eaiuo"
     enc_dict = message.build_transpose_dict(permutation)
-    print("Original message:", message.get_message_text(), "Permutation:", permutation)
-    print("Expected encryption:", "Hallu Wurld!")
-    print("Actual encryption:", message.apply_transpose(enc_dict))
+    expected_encryption = "Hallu Wurld!"
+    actual_encryption = message.apply_transpose(enc_dict)
+    if expected_encryption == actual_encryption:
+        print("SubMessage Test Case 1 Passed")
+    else:
+        print("SubMessage Test Case 1 Failed")
+        print(f"Expected {expected_encryption} but got {actual_encryption}")
+        
+    #Test Case 2 (SubMessage)
+    message = SubMessage("I am a student in 6.0001.")
+    permutation = "uoiea"
+    enc_dict = message.build_transpose_dict(permutation)
+    expected_encryption = "I um u stadont in 6.0001."
+    actual_encryption = message.apply_transpose(enc_dict)
+    if expected_encryption == actual_encryption:
+        print("SubMessage Test Case 2 Passed")
+    else:
+        print("SubMessage Test Case 2 Failed")
+        print(f"Expected {expected_encryption} but got {actual_encryption}")
+      
+    #Test Case 1 (EncryptedSubMessage)
+    message = SubMessage("Hello World!")
+    permutation = "eaiuo"
+    enc_dict = message.build_transpose_dict(permutation)
     enc_message = EncryptedSubMessage(message.apply_transpose(enc_dict))
-    print("Decrypted message:", enc_message.decrypt_message())
-     
-    #TODO: WRITE YOUR TEST CASES HERE
+    expected_decryption = "Hello World!"
+    actual_decryption = enc_message.decrypt_message()
+    if expected_decryption == actual_decryption:
+        print("EncryptedSubMessage Test Case 1 Passed")
+    else:
+        print("EncryptedSubMessage Test Case 1 FAILED")
+        print(f"Expected {expected_decryption} but got {actual_decryption}")        
+        
+    #Test Case 2 (EncryptedSubMessage)
+    message = SubMessage("I am a student in 6.0001.")
+    permutation = "uoiea"
+    enc_dict = message.build_transpose_dict(permutation)
+    enc_message = EncryptedSubMessage(message.apply_transpose(enc_dict))
+    expected_decryption = "I am a student in 6.0001."
+    actual_decryption = enc_message.decrypt_message()
+    if expected_decryption == actual_decryption:
+        print("EncryptedSubMessage Test Case 2 Passed")
+    else:
+        print("EncryptedSubMessage Test Case 2 FAILED")
+        print(f"Expected {expected_decryption} but got {actual_decryption}") 
