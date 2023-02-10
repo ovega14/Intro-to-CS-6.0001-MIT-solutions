@@ -108,28 +108,30 @@ class PhraseTrigger(Trigger):
         """
         return self.phrase
     
-    def evaluate(self, story):
+    def phrase_in(self, text):
         
         # get the phrase
         phrase = self.get_phrase()
         
         # replace punctuation with spaces in story and phrase
-        no_punc_story = ''.join(char if char not in string.punctuation else ' ' for char in story.lower())
+        no_punc_text = ''.join(char if char not in string.punctuation else ' ' for char in text.lower())
         no_punc_phrase = ''.join(char if char not in string.punctuation else ' ' for char in phrase.lower())
         
         # remove extra spaces from story and phrase
-        clean_story = ' '.join(no_punc_story.split())
-        clean_phrase = ' '.join(no_punc_phrase.split())
+        clean_text = ' '.join(no_punc_text.split()) + ' '
+        clean_phrase = ' '.join(no_punc_phrase.split()) + ' '
         
         # check if phrase in story
-        if clean_phrase in clean_story:
+        if clean_phrase in clean_text:
             return True
         else:
             return False
         
 
 # Problem 3
-# TODO: TitleTrigger
+class TitleTrigger(PhraseTrigger):
+    def evaluate(self, story):
+        return self.phrase_in(story.get_title())
 
 # Problem 4
 # TODO: DescriptionTrigger
