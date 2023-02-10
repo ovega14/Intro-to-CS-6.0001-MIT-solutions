@@ -91,7 +91,42 @@ class Trigger(object):
 # PHRASE TRIGGERS
 
 # Problem 2
-# TODO: PhraseTrigger
+class PhraseTrigger(Trigger):
+    def __init__(self, phrase):
+        """
+        Constructor to initialize PhraseTrigger object
+        
+        phrase (string): the phrase to raise trigger if in story
+        """
+        self.phrase = phrase
+        
+    def get_phrase(self):
+        """
+        Used to safely access self.phrase outside of the class
+        
+        Returns: self.phrase
+        """
+        return self.phrase
+    
+    def evaluate(self, story):
+        
+        # get the phrase
+        phrase = self.get_phrase()
+        
+        # replace punctuation with spaces in story and phrase
+        no_punc_story = ''.join(char if char not in string.punctuation else ' ' for char in story.lower())
+        no_punc_phrase = ''.join(char if char not in string.punctuation else ' ' for char in phrase.lower())
+        
+        # remove extra spaces from story and phrase
+        clean_story = ' '.join(no_punc_story.split())
+        clean_phrase = ' '.join(no_punc_phrase.split())
+        
+        # check if phrase in story
+        if clean_phrase in clean_story:
+            return True
+        else:
+            return False
+        
 
 # Problem 3
 # TODO: TitleTrigger
