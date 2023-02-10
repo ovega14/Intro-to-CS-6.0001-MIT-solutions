@@ -188,11 +188,27 @@ class NotTrigger(Trigger):
     def evaluate(self, x):
         """
         x (NewsStory object): the news item to be evaluated by Trigger
+        Returns: True if the trigger does not fire on the news item
         """
         return not self.T.evaluate(x)
 
 # Problem 8
-# TODO: AndTrigger
+class AndTrigger(Trigger):
+    def __init__(self, T1, T2):
+        """
+        Constructor:
+            T1 (Trigger object): first trigger to check for
+            T2 (Trigger object): second trigger to check for with T1
+        """
+        self.T1 = T1
+        self.T2 = T2
+    
+    def evaluate(self, x):
+        """
+        x (NewsStory object): the news item to be evaluated by the Triggers
+        Returns: True if both triggers fire on the news item
+        """
+        return self.T1.evaluate(x) and self.T2.evaluate(x)
 
 # Problem 9
 # TODO: OrTrigger
