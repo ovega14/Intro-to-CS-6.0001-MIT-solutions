@@ -152,8 +152,27 @@ class TimeTrigger(Trigger):
         self.time = datetime.strptime(time, "%d %b %Y %H:%M:%S")
 
 # Problem 6
-# TODO: BeforeTrigger and AfterTrigger
-
+class BeforeTrigger(TimeTrigger):
+    # check if story published strictly before trigger's time
+    def evaluate(self, story):
+        # be careful for times not in EST
+        try:
+            trig = story.get_pubdate() < self.time
+        except TypeError:
+            self.time = self.time.replace(tzinfo=pytz.timezone("EST"))
+            trig = story.get_pubdate() < self.time
+        return trig
+        
+class AfterTrigger(TimeTrigger):
+    # check if story published strictly after trigger's time
+    def evaluate(self, story):
+        # be careful for times not in EST
+        try:
+            trig = story.get_pubdate() > self.time
+        except TypeError:
+            self.time = self.time.replace(tzinfo=pytz.timezone("EST"))
+            trig = story.get_pubdate() > self.time
+        return trig
 
 # COMPOSITE TRIGGERS
 
