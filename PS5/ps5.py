@@ -177,7 +177,19 @@ class AfterTrigger(TimeTrigger):
 # COMPOSITE TRIGGERS
 
 # Problem 7
-# TODO: NotTrigger
+class NotTrigger(Trigger):
+    def __init__(self, T):
+        """
+        Constructor:
+            T (Trigger object): the Trigger to be inverted
+        """
+        self.T = T
+    
+    def evaluate(self, x):
+        """
+        x (NewsStory object): the news item to be evaluated by Trigger
+        """
+        return not self.T.evaluate(x)
 
 # Problem 8
 # TODO: AndTrigger
