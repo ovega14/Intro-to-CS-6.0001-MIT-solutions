@@ -1,5 +1,5 @@
 # 6.0001/6.00 Problem Set 5 - RSS Feed Filter
-# Name:
+# Name: Octavio Vega
 # Collaborators:
 # Time:
 
@@ -54,7 +54,25 @@ def process(url):
 
 # Problem 1
 
-# TODO: NewsStory
+class NewsStory(object):
+    def __init__(self, guid, title, description, link, pubdate):
+        self.guid = guid
+        self.title= title
+        self.description = description
+        self.link = link
+        self.pubdate = pubdate
+    
+    # getter methods
+    def get_guid(self):
+        return self.guid
+    def get_title(self):
+        return self.title
+    def get_description(self):
+        return self.description
+    def get_link(self):
+        return self.link
+    def get_pubdate(self):
+        return self.pubdate
 
 
 #======================
